@@ -3,8 +3,7 @@
   xmlns="http://www.w3.org/2000/svg"
   ng-mousedown="mouseDown($event)"
   ng-mousemove="mouseMove($event)"
-  oncontextmenu="return false;"
->
+  oncontextmenu="return false;">
   <defs>
       <pattern id="dots-4-11" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
           <circle cx="10" cy="10" r="0.5" style="stroke:none; fill:#aaaaaa;" />
@@ -205,8 +204,7 @@
         ng-attr-x="{{dbClickMenu.x}}"
         ng-attr-y="{{dbClickMenu.y}}"
         ng-attr-width="{{dbClickMenu.width}}"
-        ng-attr-height="{{dbClickMenu.height}}"
-    >
+        ng-attr-height="{{dbClickMenu.height}}">
             <div ng-controller="newNodeCtrl" id = "node-creator" style="width:180px; ">
                 <ui-select ng-model="type.selected"
                            id = "node-dropdown"

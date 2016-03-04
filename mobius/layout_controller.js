@@ -1,5 +1,5 @@
 
-vidamo.controller('layoutCtrl',['$scope','hotkeys',
+mobius.controller('layoutCtrl',['$scope','hotkeys',
     function($scope,hotkeys) {
 
         hotkeys.add({

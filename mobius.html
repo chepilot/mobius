@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html ng-app="vidamo" xmlns="http://www.w3.org/1999/html">
+<html ng-app="mobius" xmlns="http://www.w3.org/1999/html">
 
 <head>
     <meta charset="utf-8" />
@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
 
     <!-- stylesheet -->
-    <link rel="stylesheet" href="assets/css/vidamo-layout.css">
+    <link rel="stylesheet" href="assets/css/mobius-layout.css">
     <link rel="stylesheet" href="assets/css/viewport.css">
     <link rel="stylesheet" href="assets/css/ui-layout.css">
     <link rel="stylesheet" href="assets/css/bootstrap/bootstrap.css">
@@ -135,7 +135,7 @@
 
             <ul class="dropdown-menu">
                 <li>
-                    <a href="https://github.com/phtj/vidamo" target="_blank"> Github Repo </a>
+                    <a href="https://github.com/phtj/mobius" target="_blank"> Github Repo </a>
                 </li>
                 <li>
                     <a ng-click=" toggleCheatSheet();"> Hotkeys </a>
@@ -153,8 +153,7 @@
     <div ui-layout style="margin: 2px;
                         border:1px solid #aaaaaa;
                         border-radius: 4px;
-                        top: 23px;"
-                        id="layout">
+                        top: 23px;" id="layout">
         <div ng-controller="layoutCtrl">
             <div class="layout-area" ui-layout="{flow : 'column'}" ng-controller="procedureCtrl">
                 <!-- 3D view area  -->
@@ -162,9 +161,8 @@
                     <div ui-layout="{ flow : 'row', dividerSize:'10'}" >
                         <!-- threejs editor view port -->
                         <div ui-layout-container size = "85%" style="z-index: 0">
-
-
                             <div ng-controller="viewportCtrl">
+                                <!--viewport menu-->
                                 <span ng-if="viewportControl.layout === 'singleView'"
                                       dropdown on-toggle="toggled(open)"
                                       style="left:5px;top:10px">
@@ -207,13 +205,14 @@
                                     </ul>
                                 </span>
 
+                                <!--viewports-->
                                 <viewport control="viewportControl"
                                           id="threeViewport"
                                           style="line-height:0">
 
-                                <div ng-if="viewportControl.layout === 'fourViews'" >
-                                    <!--LT-->
-                                    <div id ="LT">
+                                    <div ng-if="viewportControl.layout === 'fourViews'" >
+                                        <!--LT-->
+                                        <div id ="LT">
                                         <span dropdown on-toggle="toggled(open)" style="left:5px;top:10px;">
                                             <button class="btn btn-default btn-xs"
                                                     dropdown-toggle
@@ -256,27 +255,27 @@
                                             </ul>
                                         </span>
 
-                                        <div ng-if="showFullCodeLT">
-                                            <div style="width: 100%;top:35px;left:0;position: absolute;bottom: 0;"
-                                                 ui-ace="{ mode: 'javascript',theme: 'tomorrow'}"
-                                                 ng-model="javascriptCode"
-                                                 readonly="{{true}}"
-                                                 ng-controller="codeCtrl">
+                                            <div ng-if="showFullCodeLT">
+                                                <div style="width: 100%;top:35px;left:0;position: absolute;bottom: 0;"
+                                                     ui-ace="{ mode: 'javascript',theme: 'tomorrow'}"
+                                                     ng-model="javascriptCode"
+                                                     readonly="{{true}}"
+                                                     ng-controller="codeCtrl">
+                                                </div>
+                                            </div>
+
+                                            <div ng-if="showDataLT" style="height: 100%;width: 100%;left:0;position: absolute;top:40px">
+                                                <div ui-grid="gridOptions"
+                                                     class="grid"
+                                                     ui-grid-resize-columns
+                                                     ui-grid-auto-resize
+                                                     style="width: 100%; bottom:0;font-size: 12px">
+                                                </div>
                                             </div>
                                         </div>
 
-                                        <div ng-if="showDataLT" style="height: 100%;width: 100%;left:0;position: absolute;top:40px">
-                                            <div ui-grid="gridOptions"
-                                                 class="grid"
-                                                 ui-grid-resize-columns
-                                                 ui-grid-auto-resize
-                                                 style="width: 100%; bottom:0;font-size: 12px">
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <!--RT-->
-                                    <div id ="RT">
+                                        <!--RT-->
+                                        <div id ="RT">
                                         <span dropdown on-toggle="toggled(open)"
                                               style="left:5px ;top:10px;">
                                              <button class="btn btn-default btn-xs" dropdown-toggle
@@ -319,27 +318,27 @@
                                             </ul>
                                         </span>
 
-                                        <div ng-if="showFullCodeRT">
-                                            <div style="width: 100%;top:35px;left:0;position: absolute;bottom: 0;"
-                                                 ui-ace="{ mode: 'javascript',theme: 'tomorrow'}"
-                                                 ng-model="javascriptCode"
-                                                 readonly="{{true}}"
-                                                 ng-controller="codeCtrl">
+                                            <div ng-if="showFullCodeRT">
+                                                <div style="width: 100%;top:35px;left:0;position: absolute;bottom: 0;"
+                                                     ui-ace="{ mode: 'javascript',theme: 'tomorrow'}"
+                                                     ng-model="javascriptCode"
+                                                     readonly="{{true}}"
+                                                     ng-controller="codeCtrl">
+                                                </div>
+                                            </div>
+
+                                            <div ng-if="showDataRT" style="height: 100%;width: 100%;left:0;position: absolute;top:40px">
+                                                <div ui-grid="gridOptions"
+                                                     class="grid"
+                                                     ui-grid-resize-columns
+                                                     ui-grid-auto-resize
+                                                     style="width: 100%; bottom:0;font-size: 12px">
+                                                </div>
                                             </div>
                                         </div>
 
-                                        <div ng-if="showDataRT" style="height: 100%;width: 100%;left:0;position: absolute;top:40px">
-                                            <div ui-grid="gridOptions"
-                                                 class="grid"
-                                                 ui-grid-resize-columns
-                                                 ui-grid-auto-resize
-                                                 style="width: 100%; bottom:0;font-size: 12px">
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <!--LB-->
-                                    <div id ="LB">
+                                        <!--LB-->
+                                        <div id ="LB">
                                         <span dropdown on-toggle="toggled(open)" style="left:5px;top:10px">
                                             <button class="btn btn-default btn-xs" dropdown-toggle style="    background: #ddd;">
                                                 {{viewportControl.LBcurrentCate}}
@@ -380,27 +379,27 @@
                                             </ul>
                                         </span>
 
-                                        <div ng-if="showFullCodeLB">
-                                            <div style="width: 100%;top:35px;left:0;position: absolute;bottom: 0;"
-                                                 ui-ace="{ mode: 'javascript',theme: 'tomorrow'}"
-                                                 ng-model="javascriptCode"
-                                                 readonly="{{true}}"
-                                                 ng-controller="codeCtrl">
+                                            <div ng-if="showFullCodeLB">
+                                                <div style="width: 100%;top:35px;left:0;position: absolute;bottom: 0;"
+                                                     ui-ace="{ mode: 'javascript',theme: 'tomorrow'}"
+                                                     ng-model="javascriptCode"
+                                                     readonly="{{true}}"
+                                                     ng-controller="codeCtrl">
+                                                </div>
+                                            </div>
+
+                                            <div ng-if="showDataLB" style="height: 100%;width: 100%;left:0;position: absolute;top:40px">
+                                                <div ui-grid="gridOptions"
+                                                     class="grid"
+                                                     ui-grid-resize-columns
+                                                     ui-grid-auto-resize
+                                                     style="width: 100%; bottom:0;font-size: 12px">
+                                                </div>
                                             </div>
                                         </div>
 
-                                        <div ng-if="showDataLB" style="height: 100%;width: 100%;left:0;position: absolute;top:40px">
-                                            <div ui-grid="gridOptions"
-                                                 class="grid"
-                                                 ui-grid-resize-columns
-                                                 ui-grid-auto-resize
-                                                 style="width: 100%; bottom:0;font-size: 12px">
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <!--RB-->
-                                    <div id ="RB">
+                                        <!--RB-->
+                                        <div id ="RB">
                                         <span dropdown on-toggle="toggled(open)" style="left:5px;top:10px">
                                              <button class="btn btn-default btn-xs" dropdown-toggle style="    background: #ddd;">
                                                  {{viewportControl.RBcurrentCate}}
@@ -441,25 +440,25 @@
                                              </ul>
                                         </span>
 
-                                        <div ng-if="showFullCodeRB">
-                                            <div style="width: 100%;top:35px;left:0;position: absolute;bottom: 0;"
-                                                 ui-ace="{ mode: 'javascript',theme: 'tomorrow'}"
-                                                 ng-model="javascriptCode"
-                                                 readonly="{{true}}"
-                                                 ng-controller="codeCtrl">
+                                            <div ng-if="showFullCodeRB">
+                                                <div style="width: 100%;top:35px;left:0;position: absolute;bottom: 0;"
+                                                     ui-ace="{ mode: 'javascript',theme: 'tomorrow'}"
+                                                     ng-model="javascriptCode"
+                                                     readonly="{{true}}"
+                                                     ng-controller="codeCtrl">
+                                                </div>
                                             </div>
-                                        </div>
 
-                                        <div ng-if="showDataRB" style="height: 100%;width: 100%;left:0;position: absolute;top:40px">
-                                            <div ui-grid="gridOptions"
-                                                 class="grid"
-                                                 ui-grid-resize-columns
-                                                 ui-grid-auto-resize
-                                                 style="width: 100%; bottom:0;font-size: 12px">
+                                            <div ng-if="showDataRB" style="height: 100%;width: 100%;left:0;position: absolute;top:40px">
+                                                <div ui-grid="gridOptions"
+                                                     class="grid"
+                                                     ui-grid-resize-columns
+                                                     ui-grid-auto-resize
+                                                     style="width: 100%; bottom:0;font-size: 12px">
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
 
                                 </viewport>
 
@@ -499,6 +498,7 @@
                             </div>
                         </div>
 
+                        <!--console-->
                         <div ui-layout-container size = "15%" class="monitor">
                             <div ng-controller="consoleCtrl">
                                  <pre class="nodeName" style="padding: 1px">
@@ -519,7 +519,7 @@
                              ui-layout-container
                              size={{procedureWidth}}
                              src = "procedureHTML.url"
-                        id="procedure">
+                             id="procedure">
                 </ng-include>
 
                 <!-- graph area -->
@@ -579,7 +579,7 @@
                                 </div>
 
                                 <span ng-controller="executeCtrl"
-                                        style="white-space: nowrap;
+                                      style="white-space: nowrap;
                                                 position: absolute;
                                                 right: 10px;
                                                 top:2px;
@@ -598,8 +598,8 @@
                                         <panzoom config="panzoomConfig"
                                                  model="panzoomModel"
                                                  class="panzoom">
-                                                <flow-chart chart="chartViewModel" class = "flow-chart" >
-                                                </flow-chart>
+                                            <flow-chart chart="chartViewModel" class = "flow-chart" >
+                                            </flow-chart>
                                         </panzoom>
                                     </div>
                                 </div>
@@ -654,7 +654,7 @@
                         <a ng-click="delete()"> Hide </a>
                     </li>
                     <!--<li>-->
-                        <!--<a ng-click="rename()"> Rename </a>-->
+                    <!--<a ng-click="rename()"> Rename </a>-->
                     <!--</li>-->
                 </ul>
             </div>
@@ -711,7 +711,7 @@
 <script type="text/javascript" src="assets/js/angular-ui/angular-xeditable/xeditable.js"></script>
 <script type="text/javascript" src="assets/js/angular-ui/ui-grid/ui-grid.min.js"></script>
 <script type="text/javascript" src="assets/js/angular-ui/hotkeys.js"></script>
-<script type="text/javascript" src="mobius/graph/ng-context-menu.js"></script>
+<script type="text/javascript" src="mobius/graph/ui-contextMenu/ng-context-menu.js"></script>
 
 <script type="text/javascript" src="assets/js/angular-ui/ui-ace/ui-ace.js"></script>
 <script type="text/javascript" src="assets/js/packages/ace-builds/src-min-noconflict/ace.js"></script>
@@ -730,7 +730,7 @@
 <!-- zoom and pan -->
 <script src="assets/js/packages/hamsterjs/hamster.js"></script>
 <script src="assets/js/angular/angular-mousewheel/mousewheel.js"></script>
-<script src="assets/js/angular-ui/ui-panzoom/panzoom.js"></script>
+<script src="mobius/graph/ui-panzoom/panzoom.js"></script>
 
 <!-- three.js -->
 <script src="assets/js/threejs/three.js"></script>
@@ -785,13 +785,15 @@
 <script src="mobius/service/model.js"></script>
 <script src="mobius/service/console.js"></script>
 <script src="mobius/service/nodeCollection.js"></script>
+<script src="mobius/service/dataConversion.js"></script>
+<script src="mobius/service/executeService.js"></script>
 
 <!-- filters -->
 <script src="mobius/procedure/procedure_filters.js"></script>
 
 <!-- other -->
 <script src="mobius/datastructure.js"></script>
-<script src="mobius/module_verb.js"></script>
+<script src="mobius/module/module_verb.js"></script>
 
 
 <!--angular material-->
