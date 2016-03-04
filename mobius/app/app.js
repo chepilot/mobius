@@ -135,7 +135,7 @@ var mobius = angular.module('mobius',
                     var browserId = M.join(' ');
                 }
                 alert('Your browser is ' + browserId +', Mobius currently only supports chrome.');
-                window.location.href = "index.html"
+                window.location.href = "../../index.html"
             }
     }
 
