@@ -1,12 +1,10 @@
-//
-// VIDAMO App
-//
+// @mobius app module
 
-var vidamo = angular.module('vidamo',
+var mobius = angular.module('mobius',
                             [
                                 //'ngMaterial',
                                 'ui.layout',
-                                 'ui.ace',
+                                'ui.ace',
                                 'ui.bootstrap',
                                 'ui.select',
                                 'ngSanitize',
@@ -15,46 +13,74 @@ var vidamo = angular.module('vidamo',
                                 'flowChart',
                                 'panzoom',
                                 'xeditable',
-                                'ui.bootstrap.contextMenu',
                                 'ui.grid.resizeColumns',
                                 'ui.grid.autoResize',
-                                'cfp.hotkeys'
+                                'cfp.hotkeys',
+                                'ngMaterial',
+                                'ngRoute',
+                                'ng-context-menu',
+                                'decipher.history'
                             ]);
 
+    mobius.filter('propsFilter', function() {
+        return function(items, props) {
+            var out = [];
+
+            if (angular.isArray(items)) {
+                var keys = Object.keys(props);
+
+                items.forEach(function(item) {
+                    var itemMatches = false;
+
+                    for (var i = 0; i < keys.length; i++) {
+                        var prop = keys[i];
+                        var text = props[prop].toLowerCase();
+                        if (item[prop].toString().toLowerCase().indexOf(text) !== -1) {
+                            itemMatches = true;
+                            break;
+                        }
+                    }
+
+                    if (itemMatches) {
+                        out.push(item);
+                    }
+                });
+            } else {
+                // Let the output be the input untouched
+                out = items;
+            }
+
+            return out;
+        };
+    });
+
     // Simple service to create a prompt.
-    // todo replace with customizable one
-     vidamo.service('prompt', function () {
+    // fixme not using
+     mobius.service('prompt', function () {
         return prompt;
     });
 
     // configuration for angular-xeditable plugin
     // bootstrap3 theme. Can be also 'bs2', 'default'
-    vidamo.run(function(editableOptions) {
+    mobius.run(function(editableOptions) {
         editableOptions.theme = 'bs3';
     });
 
     // config for ui-select plugin
-    vidamo.config(function(uiSelectConfig) {
+    mobius.config(function(uiSelectConfig) {
         uiSelectConfig.theme = 'bootstrap';
         uiSelectConfig.appendToBody = false;
     });
 
     // configuration of download files
     // config to add blob as safe prefix in the white list
-    vidamo.config( [
+    mobius.config( [
         '$compileProvider',
         function( $compileProvider ) {
             $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|blob|data):/);
         }
     ]);
 
-    vidamo.service('browser', ['$window', function($window) {
-
-        return function() {
-
-
-        }
-    }]);
 
     // fixme not in use anymore
     // recursively searching by id
@@ -117,7 +143,6 @@ var vidamo = angular.module('vidamo',
 
     // regex to get parameter names
     // solution found in http://stackoverflow.com/questions/1007981/how-to-get-function-parameter-names-values-dynamically-from-javascript
-    // fixme should there be a way to do it in angularjs?
     var STRIP_COMMENTS = /(\/\/.*$)|(\/\*[\s\S]*?\*\/)|(\s*=[^,\)]*(('(?:\\'|[^'\r\n])*')|("(?:\\"|[^"\r\n])*"))|(\s*=[^,\)]*))/mg;
     var ARGUMENT_NAMES = /([^\s,]+)/g;
     function getParamNames(func) {
@@ -127,6 +152,28 @@ var vidamo = angular.module('vidamo',
             result = [];
         return result;
     }
+
+
+
+    $(document).keydown(function(e) {
+        var doPrevent;
+        if (e.keyCode == 8) {
+            var d = e.srcElement || e.target;
+            if (d.tagName.toUpperCase() == 'INPUT' || d.tagName.toUpperCase() == 'TEXTAREA') {
+                doPrevent = d.readOnly || d.disabled;
+            }
+            else
+                doPrevent = true;
+        }
+        else
+            doPrevent = false;
+
+
+        if (doPrevent)
+            e.preventDefault();
+    });
+
+
 
     checkBrowser();
 

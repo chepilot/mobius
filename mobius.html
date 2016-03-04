@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html ng-app="vidamo" xmlns="http://www.w3.org/1999/html">
+<html ng-app="mobius" xmlns="http://www.w3.org/1999/html">
 
 <head>
     <meta charset="utf-8" />
@@ -10,7 +10,8 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
 
     <!-- stylesheet -->
-    <link rel="stylesheet" href="assets/css/vidamo-layout.css">
+    <link rel="stylesheet" href="assets/css/mobius-layout.css">
+    <link rel="stylesheet" href="assets/css/viewport.css">
     <link rel="stylesheet" href="assets/css/ui-layout.css">
     <link rel="stylesheet" href="assets/css/bootstrap/bootstrap.css">
     <link rel="stylesheet" href="assets/css/ui-tree.css">
@@ -20,12 +21,13 @@
     <link rel="stylesheet" href="assets/css/hotkeys.css">
     <link rel="stylesheet" href="assets/css/material.css">
     <link rel="stylesheet" href="assets/css/ui-grid/ui-grid.min.css">
+    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.8.5/css/selectize.default.css">
 
-
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/0.11.2/angular-material.min.css">
 </head>
 
 <body>
-<div>
+<div >
 
     <!-- dropdown Menu -->
     <div ng-controller="menuCtrl" class = "menubar">
@@ -33,7 +35,7 @@
             <a style="color: #000" href dropdown-toggle>  File |</a>
             <ul class="dropdown-menu">
                 <li>
-                    <a href="" ng-click="newScene()"> New Scene</a>
+                    <a href="" ng-click="newScene($event)"> New Scene</a>
                 </li>
 
                 <li>
@@ -55,50 +57,57 @@
                     </a>
 
                     <ul class="dropdown-menu">
-                        <li><a ng-click="loadExample('Ex01_KillianRoof.json')"> Killian Roof </a></li>
-                        <li><a ng-click="loadExample('Ex02_ParametricBrickWall.json')"> Parametric Brick Wall </a></li>
-                        <li><a ng-click="loadExample('F2_Surface&CurvesPart1.json')"> Surface and Curves Part1 </a></li>
-                        <li><a ng-click="loadExample('F0_Surface&CurvesPart2.json')"> Surface and Curves Part2 </a></li>
-                        <li><a ng-click="loadExample('F3_Geometry_Part1.json')"> Geometry Part 1 </a></li>
-                        <li><a ng-click="loadExample('F4_Geometry_Part2.json')"> Geometry Part 2 </a></li>
-                        <li><a ng-click="loadExample('F5_SurfaceCurveAnalysisFunctions.json')"> Surface and Curves Analysis</a></li>
-                        <li><a ng-click="loadExample('F6_CSGOperations.json')"> Solid Operations</a></li>
-                        <li><a ng-click="loadExample('F7_ListOperations.json')"> List Operations</a></li>
-                        <li><a ng-click="loadExample('F8_GeneralFunctions.json')"> General Functions</a></li>
+                        <li><a ng-click="loadExample('00_KillianRoof.json')"> Killian Roof </a></li>
+                        <li><a ng-click="loadExample('03_SimpleTower.json')"> Simple Tower </a></li>
+                        <li><a ng-click="loadExample('01_SpiralTowers.json')"> Spiral Towers </a></li>
+                        <li><a ng-click="loadExample('02_Extrusions.json')"> Extrusion Example </a></li>
                     </ul>
-
-
-
                 </li>
             </ul>
         </span>
 
-        <!--<span dropdown on-toggle="toggled(open)">-->
-            <!--<a style="color: #000" href dropdown-toggle>  Edit |</a>-->
-            <!--<ul class="dropdown-menu">-->
-                <!--<li>-->
-                    <!--<a> Todo:Undo </a>-->
-                <!--</li>-->
 
-                <!--<li>-->
-                    <!--<a> Todo:Redo </a>-->
-                <!--</li>-->
-            <!--</ul>-->
-        <!--</span>-->
+        <span dropdown on-toggle="toggled(open)">
+            <a style="color: #000" href dropdown-toggle>  View |</a>
+            <ul class="dropdown-menu">
+                <li>
+                    <a ng-click = "singleView()"> Single View </a>
+                </li>
+
+                <li>
+                    <a ng-click = "fourViews()"> Four Views </a>
+                </li>
+            </ul>
+        </span>
 
         <span dropdown on-toggle="toggled(open)" >
               <a style="color: #000" href dropdown-toggle>  Node |</a>
               <ul class="dropdown-menu">
                   <li>
                       <input type="file" id="importNode"
-                             style="visibility: hidden; width: 1px; height: 1px" multiple
+                             style="visibility: hidden; width: 1px; height: 1px"
+                             multiple
                              onchange="angular.element(this).scope().importNode(this.files)"/>
                       <a href="" onclick="document.getElementById('importNode').click()"> Import Node </a>
                   </li>
 
+                  <!--todo when no node selected grey out-->
                   <li>
                       <a ng-href="{{nodeUrl}}" download="node.json" ng-click = "exportNode()">
-                          Export Node
+                          Export Selected Node
+                      </a>
+                  </li>
+
+                  <li>
+                      <input type="file" id="importNodeLib"
+                             style="visibility: hidden; width: 1px; height: 1px"
+                             onchange="angular.element(this).scope().importNodeLib(this.files)"/>
+                      <a href="" onclick="document.getElementById('importNodeLib').click()"> Import Node Library</a>
+                  </li>
+
+                  <li>
+                      <a ng-href="{{nodeLibUrl}}" download="nodeLib.json" ng-click = "exportNodeLib()">
+                          Export Node Library
                       </a>
                   </li>
               </ul>
@@ -125,17 +134,15 @@
             <a style="color: #000" href dropdown-toggle>  Help </a>
 
             <ul class="dropdown-menu">
-                <!--<li>-->
-                    <!--<a> Todo:Help </a>-->
-                <!--</li>-->
                 <li>
-                    <a href="https://github.com/phtj/vidamo" target="_blank"> Github Repo </a>
+                    <a href="https://github.com/phtj/mobius" target="_blank"> Github Repo </a>
                 </li>
                 <li>
                     <a ng-click=" toggleCheatSheet();"> Hotkeys </a>
                 </li>
                 <li>
-                    <a href="doc/MobiusHelp.html" target="_blank"> Docs </a>
+
+                    <a href="doc/out/index.html" target="_blank"> Docs </a>
                 </li>
             </ul>
         </span>
@@ -146,70 +153,337 @@
     <div ui-layout style="margin: 2px;
                         border:1px solid #aaaaaa;
                         border-radius: 4px;
-                        top: 23px;">
+                        top: 23px;" id="layout">
         <div ng-controller="layoutCtrl">
             <div class="layout-area" ui-layout="{flow : 'column'}" ng-controller="procedureCtrl">
-
                 <!-- 3D view area  -->
-                <div class=" view-area" ui-layout-container size={{viewportWidth}}>
+                <div class=" view-area" ui-layout-container size={{viewportWidth}} id="viewport">
                     <div ui-layout="{ flow : 'row', dividerSize:'10'}" >
                         <!-- threejs editor view port -->
                         <div ui-layout-container size = "85%" style="z-index: 0">
-
                             <div ng-controller="viewportCtrl">
+                                <!--viewport menu-->
+                                <span ng-if="viewportControl.layout === 'singleView'"
+                                      dropdown on-toggle="toggled(open)"
+                                      style="left:5px;top:10px">
+                                     <button class="btn btn-default btn-xs" dropdown-toggle style="background: #ddd;">
+                                         {{viewportControl.currentCate}}
+                                         <span class="caret"></span>
+                                     </button>
 
-                                <span dropdown on-toggle="toggled(open)" style="left:5px;top:10px">
+                                    <ul class="dropdown-menu" >
+                                        <li class="dropdown-submenu">
+                                            <a href="#"> Set Viewport </a>
+                                            <ul class="dropdown-menu">
+                                                <li><a   href="#" ng-click = "toggleGeometry('main')">Geometry</a></li>
+                                                <li><a   href="#" ng-click = "toggleTopology('main')">Topology</a></li>
+                                                <li><a   href="#" ng-click = "toggleData('main')">Data</a></li>
+                                                <li><a   href="#" ng-click = "toggleFullCode('main')">Generated Code</a></li>
+                                            </ul>
+                                        </li>
 
-                                 <button class="btn btn-default btn-xs" dropdown-toggle style="    background: #ddd;">
-                                     {{viewportControl.currentCate}}
-                                     <span class="caret"></span>
-                                 </button>
+                                        <li class="dropdown-submenu" ng-if="showGeometry">
+                                            <a   href="#"> Set View </a>
+                                            <ul class="dropdown-menu">
+                                                <li><a   ng-click="viewportControl.perspectiveView('main')">Perspective</a></li>
+                                                <li><a   ng-click="viewportControl.topView('main')">Top</a></li>
+                                                <li><a   ng-click="viewportControl.bottomView('main')">Bottom</a></li>
+                                                <li><a   ng-click="viewportControl.frontView('main')">Front</a></li>
+                                                <li><a   ng-click="viewportControl.backView('main')">Back</a></li>
+                                                <li><a   ng-click="viewportControl.leftView('main')">Left</a></li>
+                                                <li><a   ng-click="viewportControl.rightView('main')">Right</a></li>
+                                            </ul>
+                                        </li>
 
-                                <ul class="dropdown-menu" >
-                                    <!--<li class="divider"></li>-->
-                                    <li class="dropdown-submenu">
-                                        <a href="#"> Set Viewport </a>
-                                        <ul class="dropdown-menu">
-                                            <li><a   href="#" ng-click = "toggleGeometry()">Geometry</a></li>
-                                            <li><a   href="#" ng-click = "toggleTopology()">Topology</a></li>
-                                            <li><a   href="#" ng-click = "toggleData()">Data</a></li>
-                                            <li><a   href="#" ng-click = "toggleFullCode()">Generated Code</a></li>
-                                        </ul>
-                                    </li>
+                                        <li class="dropdown-submenu" ng-if="showGeometry">
+                                            <a   href="#">Display Mode</a>
+                                            <ul class="dropdown-menu">
+                                                <li><a    ng-click="viewportControl.toggleWireframe()">Wireframe</a></li>
+                                                <li><a   ng-click="viewportControl.toggleRender()">Render</a></li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </span>
 
-                                    <li class="dropdown-submenu" ng-if="showGeometry">
-                                        <a   href="#"> Set View </a>
-                                        <ul class="dropdown-menu">
-                                            <li><a   ng-click="viewportControl.perspectiveView()">Perspective</a></li>
-                                            <li><a   ng-click="viewportControl.topView()">Top</a></li>
-                                            <li><a   ng-click="viewportControl.bottomView()">Bottom</a></li>
-                                            <li><a   ng-click="viewportControl.frontView()">Front</a></li>
-                                            <li><a   ng-click="viewportControl.backView()">Back</a></li>
-                                            <li><a   ng-click="viewportControl.leftView()">Left</a></li>
-                                            <li><a   ng-click="viewportControl.rightView()">Right</a></li>
-                                        </ul>
-                                    </li>
+                                <!--viewports-->
+                                <viewport control="viewportControl"
+                                          id="threeViewport"
+                                          style="line-height:0">
 
-                                    <li class="dropdown-submenu" ng-if="showGeometry">
-                                        <a   href="#">Display Mode</a>
-                                        <ul class="dropdown-menu">
-                                            <li><a    ng-click="viewportControl.toggleWireframe()">Wireframe</a></li>
-                                            <li><a   ng-click="viewportControl.toggleRender()">Render</a></li>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </span>
+                                    <div ng-if="viewportControl.layout === 'fourViews'" >
+                                        <!--LT-->
+                                        <div id ="LT">
+                                        <span dropdown on-toggle="toggled(open)" style="left:5px;top:10px;">
+                                            <button class="btn btn-default btn-xs"
+                                                    dropdown-toggle
+                                                    style="background: #ddd;">
+                                                {{viewportControl.LTcurrentCate}}
+                                                <span class="caret"></span>
+                                            </button>
 
-                                <topo-viewport control="topoViewportControl" id="topoViewport"></topo-viewport>
+                                            <ul class="dropdown-menu" >
+                                                <li class="dropdown-submenu">
+                                                    <a href="#"> Set Viewport </a>
+                                                    <ul class="dropdown-menu">
+                                                        <li><a href="#" ng-click = "toggleGeometry('LT')">Geometry</a></li>
+                                                        <li><a href="#" ng-click = "toggleTopology('LT')">Topology</a></li>
+                                                        <li><a href="#" ng-click = "toggleData('LT')">Data</a></li>
+                                                        <li><a href="#" ng-click = "toggleFullCode('LT')">Generated Code</a></li>
+                                                    </ul>
+                                                </li>
 
-                                <viewport control="viewportControl" id="threeViewport"></viewport>
+                                                <li class="dropdown-submenu" ng-if="showGeometryLT">
+                                                    <a   href="#"> Set View </a>
+                                                    <ul class="dropdown-menu">
+                                                        <li><a   ng-click="viewportControl.perspectiveView('LT')">Perspective</a></li>
+                                                        <li><a   ng-click="viewportControl.topView('LT')">Top</a></li>
+                                                        <li><a   ng-click="viewportControl.bottomView('LT')">Bottom</a></li>
+                                                        <li><a   ng-click="viewportControl.frontView('LT')">Front</a></li>
+                                                        <li><a   ng-click="viewportControl.backView('LT')">Back</a></li>
+                                                        <li><a   ng-click="viewportControl.leftView('LT')">Left</a></li>
+                                                        <li><a   ng-click="viewportControl.rightView('LT')">Right</a></li>
+                                                    </ul>
+                                                </li>
+
+                                                <li class="dropdown-submenu" ng-if="showGeometryLT">
+                                                    <a   href="#">Display Mode</a>
+                                                    <ul class="dropdown-menu">
+                                                        <li><a    ng-click="viewportControl.wireframeOption('LT')">Wireframe</a></li>
+                                                        <li><a   ng-click="viewportControl.renderOption('LT')">Render</a></li>
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                        </span>
+
+                                            <div ng-if="showFullCodeLT">
+                                                <div style="width: 100%;top:35px;left:0;position: absolute;bottom: 0;"
+                                                     ui-ace="{ mode: 'javascript',theme: 'tomorrow'}"
+                                                     ng-model="javascriptCode"
+                                                     readonly="{{true}}"
+                                                     ng-controller="codeCtrl">
+                                                </div>
+                                            </div>
+
+                                            <div ng-if="showDataLT" style="height: 100%;width: 100%;left:0;position: absolute;top:40px">
+                                                <div ui-grid="gridOptions"
+                                                     class="grid"
+                                                     ui-grid-resize-columns
+                                                     ui-grid-auto-resize
+                                                     style="width: 100%; bottom:0;font-size: 12px">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!--RT-->
+                                        <div id ="RT">
+                                        <span dropdown on-toggle="toggled(open)"
+                                              style="left:5px ;top:10px;">
+                                             <button class="btn btn-default btn-xs" dropdown-toggle
+                                                     style="background: #ddd;">
+                                                 {{viewportControl.RTcurrentCate}}
+                                                 <span class="caret"></span>
+                                             </button>
+
+                                            <ul class="dropdown-menu" >
+                                                <li class="dropdown-submenu">
+                                                    <a href="#"> Set Viewport </a>
+                                                    <ul class="dropdown-menu">
+                                                        <li><a   href="#" ng-click = "toggleGeometry('RT')">Geometry</a></li>
+                                                        <li><a   href="#" ng-click = "toggleTopology('RT')">Topology</a></li>
+                                                        <li><a   href="#" ng-click = "toggleData('RT')">Data</a></li>
+                                                        <li><a   href="#" ng-click = "toggleFullCode('RT')">Generated Code</a></li>
+                                                    </ul>
+                                                </li>
+
+                                                <li class="dropdown-submenu" ng-if="showGeometryRT">
+                                                    <a   href="#"> Set View </a>
+                                                    <ul class="dropdown-menu">
+                                                        <li><a   ng-click="viewportControl.perspectiveView('RT')">Perspective</a></li>
+                                                        <li><a   ng-click="viewportControl.topView('RT')">Top</a></li>
+                                                        <li><a   ng-click="viewportControl.bottomView('RT')">Bottom</a></li>
+                                                        <li><a   ng-click="viewportControl.frontView('RT')">Front</a></li>
+                                                        <li><a   ng-click="viewportControl.backView('RT')">Back</a></li>
+                                                        <li><a   ng-click="viewportControl.leftView('RT')">Left</a></li>
+                                                        <li><a   ng-click="viewportControl.rightView('RT')">Right</a></li>
+                                                    </ul>
+                                                </li>
+
+                                                <li class="dropdown-submenu" ng-if="showGeometryRT">
+                                                    <a   href="#">Display Mode</a>
+                                                    <ul class="dropdown-menu">
+                                                        <li><a    ng-click="viewportControl.wireframeOption('RT')">Wireframe</a></li>
+                                                        <li><a   ng-click="viewportControl.renderOption('RT')">Render</a></li>
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                        </span>
+
+                                            <div ng-if="showFullCodeRT">
+                                                <div style="width: 100%;top:35px;left:0;position: absolute;bottom: 0;"
+                                                     ui-ace="{ mode: 'javascript',theme: 'tomorrow'}"
+                                                     ng-model="javascriptCode"
+                                                     readonly="{{true}}"
+                                                     ng-controller="codeCtrl">
+                                                </div>
+                                            </div>
+
+                                            <div ng-if="showDataRT" style="height: 100%;width: 100%;left:0;position: absolute;top:40px">
+                                                <div ui-grid="gridOptions"
+                                                     class="grid"
+                                                     ui-grid-resize-columns
+                                                     ui-grid-auto-resize
+                                                     style="width: 100%; bottom:0;font-size: 12px">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!--LB-->
+                                        <div id ="LB">
+                                        <span dropdown on-toggle="toggled(open)" style="left:5px;top:10px">
+                                            <button class="btn btn-default btn-xs" dropdown-toggle style="    background: #ddd;">
+                                                {{viewportControl.LBcurrentCate}}
+                                                <span class="caret"></span>
+                                            </button>
+
+                                            <ul class="dropdown-menu" >
+                                                <li class="dropdown-submenu">
+                                                    <a href="#"> Set Viewport </a>
+                                                    <ul class="dropdown-menu">
+                                                        <li><a   href="#" ng-click = "toggleGeometry('LB')">Geometry</a></li>
+                                                        <li><a   href="#" ng-click = "toggleTopology('LB')">Topology</a></li>
+                                                        <li><a   href="#" ng-click = "toggleData('LB')">Data</a></li>
+                                                        <li><a   href="#" ng-click = "toggleFullCode('LB')">Generated Code</a></li>
+                                                    </ul>
+                                                </li>
+
+                                                <li class="dropdown-submenu" ng-if="showGeometryLB">
+                                                    <a   href="#"> Set View </a>
+                                                    <ul class="dropdown-menu">
+                                                        <li><a   ng-click="viewportControl.perspectiveView('LB')">Perspective</a></li>
+                                                        <li><a   ng-click="viewportControl.topView('LB')">Top</a></li>
+                                                        <li><a   ng-click="viewportControl.bottomView('LB')">Bottom</a></li>
+                                                        <li><a   ng-click="viewportControl.frontView('LB')">Front</a></li>
+                                                        <li><a   ng-click="viewportControl.backView('LB')">Back</a></li>
+                                                        <li><a   ng-click="viewportControl.leftView('LB')">Left</a></li>
+                                                        <li><a   ng-click="viewportControl.rightView('LB')">Right</a></li>
+                                                    </ul>
+                                                </li>
+
+                                                <li class="dropdown-submenu" ng-if="showGeometryLB">
+                                                    <a   href="#">Display Mode</a>
+                                                    <ul class="dropdown-menu">
+                                                        <li><a    ng-click="viewportControl.wireframeOption('LB')">Wireframe</a></li>
+                                                        <li><a   ng-click="viewportControl.renderOption('LB')">Render</a></li>
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                        </span>
+
+                                            <div ng-if="showFullCodeLB">
+                                                <div style="width: 100%;top:35px;left:0;position: absolute;bottom: 0;"
+                                                     ui-ace="{ mode: 'javascript',theme: 'tomorrow'}"
+                                                     ng-model="javascriptCode"
+                                                     readonly="{{true}}"
+                                                     ng-controller="codeCtrl">
+                                                </div>
+                                            </div>
+
+                                            <div ng-if="showDataLB" style="height: 100%;width: 100%;left:0;position: absolute;top:40px">
+                                                <div ui-grid="gridOptions"
+                                                     class="grid"
+                                                     ui-grid-resize-columns
+                                                     ui-grid-auto-resize
+                                                     style="width: 100%; bottom:0;font-size: 12px">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!--RB-->
+                                        <div id ="RB">
+                                        <span dropdown on-toggle="toggled(open)" style="left:5px;top:10px">
+                                             <button class="btn btn-default btn-xs" dropdown-toggle style="    background: #ddd;">
+                                                 {{viewportControl.RBcurrentCate}}
+                                                 <span class="caret"></span>
+                                             </button>
+
+                                             <ul class="dropdown-menu" >
+                                                 <li class="dropdown-submenu">
+                                                     <a href="#"> Set Viewport </a>
+                                                     <ul class="dropdown-menu">
+                                                         <li><a   href="#" ng-click = "toggleGeometry('RB')">Geometry</a></li>
+                                                         <li><a   href="#" ng-click = "toggleTopology('RB')">Topology</a></li>
+                                                         <li><a   href="#" ng-click = "toggleData('RB')">Data</a></li>
+                                                         <li><a   href="#" ng-click = "toggleFullCode('RB')">Generated Code</a></li>
+                                                     </ul>
+                                                 </li>
+
+                                                 <li class="dropdown-submenu" ng-if="showGeometryRB">
+                                                     <a   href="#"> Set View </a>
+                                                     <ul class="dropdown-menu">
+                                                         <li><a   ng-click="viewportControl.perspectiveView('RB')">Perspective</a></li>
+                                                         <li><a   ng-click="viewportControl.topView('RB')">Top</a></li>
+                                                         <li><a   ng-click="viewportControl.bottomView('RB')">Bottom</a></li>
+                                                         <li><a   ng-click="viewportControl.frontView('RB')">Front</a></li>
+                                                         <li><a   ng-click="viewportControl.backView('RB')">Back</a></li>
+                                                         <li><a   ng-click="viewportControl.leftView('RB')">Left</a></li>
+                                                         <li><a   ng-click="viewportControl.rightView('RB')">Right</a></li>
+                                                     </ul>
+                                                 </li>
+
+                                                 <li class="dropdown-submenu" ng-if="showGeometryRB">
+                                                     <a href="#">Display Mode</a>
+                                                     <ul class="dropdown-menu">
+                                                         <li><a    ng-click="viewportControl.wireframeOption('RB')">Wireframe</a></li>
+                                                         <li><a   ng-click="viewportControl.renderOption('RB')">Render</a></li>
+                                                     </ul>
+                                                 </li>
+                                             </ul>
+                                        </span>
+
+                                            <div ng-if="showFullCodeRB">
+                                                <div style="width: 100%;top:35px;left:0;position: absolute;bottom: 0;"
+                                                     ui-ace="{ mode: 'javascript',theme: 'tomorrow'}"
+                                                     ng-model="javascriptCode"
+                                                     readonly="{{true}}"
+                                                     ng-controller="codeCtrl">
+                                                </div>
+                                            </div>
+
+                                            <div ng-if="showDataRB" style="height: 100%;width: 100%;left:0;position: absolute;top:40px">
+                                                <div ui-grid="gridOptions"
+                                                     class="grid"
+                                                     ui-grid-resize-columns
+                                                     ui-grid-auto-resize
+                                                     style="width: 100%; bottom:0;font-size: 12px">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </viewport>
+
+
+
+                                <topo-viewport control="topoViewportControl" id="topoViewport">
+                                </topo-viewport>
+
+                                <div id="LT1" ></div>
+
+                                <div id="RT1" ></div>
+
+                                <div id="LB1" ></div>
+
+                                <div id="RB1" ></div>
+
+                                <div id = 'topoContainer' style="position: absolute;top:0;bottom:0;left:0;right:0;"></div>
+
 
                                 <div ng-if="showFullCode">
                                     <div style="height: 100%;width: 100%;top:35px;left:0;position: absolute;"
-                                        ui-ace="{ mode: 'javascript',theme: 'tomorrow'}"
-                                        ng-model="javascriptCode"
-                                        readonly="{{true}}"
-                                        ng-controller="graphCtrl">
+                                         ui-ace="{ mode: 'javascript',theme: 'tomorrow'}"
+                                         ng-model="javascriptCode"
+                                         readonly="{{true}}"
+                                         ng-controller="codeCtrl">
                                     </div>
                                 </div>
 
@@ -221,11 +495,10 @@
                                          style="height: 100%;width: 100%; bottom:100px;font-size: 12px">
                                     </div>
                                 </div>
-
                             </div>
-
                         </div>
 
+                        <!--console-->
                         <div ui-layout-container size = "15%" class="monitor">
                             <div ng-controller="consoleCtrl">
                                  <pre class="nodeName" style="padding: 1px">
@@ -234,12 +507,9 @@
                                             style="padding-top: 0;padding-bottom:0;right:10px"
                                             id = "clear"
                                             ng-click="clearConsole()"> Clear </button>
-                                </pre>
-
+                                 </pre>
                                 <div class="console" id = 'log' ></div>
                             </div>
-
-
                         </div>
                     </div>
                 </div>
@@ -248,19 +518,20 @@
                 <ng-include  ng-if="displayProcedure"
                              ui-layout-container
                              size={{procedureWidth}}
-                             src = "procedureHTML.url">
+                             src = "procedureHTML.url"
+                             id="procedure">
                 </ng-include>
 
                 <!-- graph area -->
-                <div class="graph-area" ui-layout-container  size={{graphWidth}}>
+                <div class="graph-area" ui-layout-container  size={{graphWidth}} id="graph">
 
                     <div ui-layout="{ flow : 'row', dividerSize:'10'}" >
                         <div ui-layout-container size = "25%">
 
-                            <div ng-controller="procedureCtrl">
+                            <div >
                                 <div ng-if = "currentNodeName">
                                     <pre class="nodeName" style="padding: 1px">
-                                        &nbsp &nbsp {{currentNodeType}} &nbsp : &nbsp {{currentNodeName}} &nbsp
+                                        &nbsp &nbsp {{currentNodeType}} {{currentNodeVersion}} : &nbsp {{currentNodeName}} &nbsp
                                     </pre>
                                 </div>
 
@@ -270,19 +541,20 @@
                                     </pre>
                                 </div>
 
-                                <div
-                                        style="overflow: auto;
+                                <div style="overflow: auto;
                                             position: absolute;
                                             height: 100%;
                                             width: 100%;
                                             border: 1px solid #cccccc;
                                             border-radius: 4px;
                                             margin-top:1px">
-                                    <div ui-tree id="tree-root-interface" >
+                                    <div ui-tree id="tree-root-interface"
+                                         data-nodrop-enabled="true">
                                         <div ui-tree-nodes="" ng-model="interface">
                                             <div ng-repeat="node in interface"
                                                  ui-tree-node
-                                                 ng-include="'mobius/procedure/interface_template.html'">
+                                                 ng-include="'mobius/procedure/interface_template.html'"
+                                                 ng-if="node.connected !== true">
                                             </div>
                                         </div>
                                     </div>
@@ -292,12 +564,11 @@
 
                         <!-- pan & zoom field -->
                         <div mouse-capture
-
                              ui-layout-container size = "75%">
                             <div ng-controller="graphCtrl">
                                 <div ng-if = "currentNodeName">
                                     <pre class="nodeName" style="padding: 1px">
-                                        &nbsp &nbsp {{currentNodeType}} &nbsp : &nbsp {{currentNodeName}} &nbsp
+                                        &nbsp &nbsp {{currentNodeName}} &nbsp
                                     </pre>
                                 </div>
 
@@ -308,7 +579,7 @@
                                 </div>
 
                                 <span ng-controller="executeCtrl"
-                                        style="white-space: nowrap;
+                                      style="white-space: nowrap;
                                                 position: absolute;
                                                 right: 10px;
                                                 top:2px;
@@ -318,13 +589,6 @@
                                             title="Run program">
                                         Run
                                     </button>
-
-                                        <span us-spinner="{radius:30, width:8, length: 16}" spinner-key="spinner"
-                                                style="position: absolute;
-                                                left:50%;
-                                                z-index: 999999999999999999999">
-                                        </span>
-
                                 </span>
 
                                 <div ng-controller="znpController" class="znpController">
@@ -334,22 +598,102 @@
                                         <panzoom config="panzoomConfig"
                                                  model="panzoomModel"
                                                  class="panzoom">
-                                            <div>
-                                                <flow-chart chart="chartViewModel" class = "flow-chart" >
-                                                </flow-chart>
-                                            </div>
+                                            <flow-chart chart="chartViewModel" class = "flow-chart" >
+                                            </flow-chart>
                                         </panzoom>
                                     </div>
                                 </div>
-
                             </div>
                         </div>
+
                     </div>
                 </div>
             </div>
         </div>
+
+        <div ng-controller="nodeMenuCtrl">
+            <div class="dropdown position-fixed " id="menu-node" >
+                <ul class="dropdown-menu">
+                    <li class="dropdown-submenu">
+                        <a> Show Input </a>
+                        <ul class="dropdown-menu" ng-if="disableAddInput()">
+                            <li ng-repeat="input in inputs"
+                                ng-if="input.title ==='Input' && checkDupInput(input)"
+                                ng-click="addInputConnector(input)">
+                                <a> {{input.name}}</a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li class="dropdown-submenu" >
+                        <a> Show Output </a>
+                        <ul class="dropdown-menu " ng-if="disableAddOutput()">
+                            <li ng-repeat="procedure in procedures"
+                                ng-if="procedure.title ==='Output' && checkDupOutput(procedure)"
+                                ng-click="addOutputConnector(procedure)"
+                            >
+                                <a> {{procedure.name}}</a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li ng-if="checkDupFunc()"><a ng-click="addFunctionOutput()"> Show Function output </a></li>
+                    <li><a ng-click="delete()"> Delete </a></li>
+                    <li><a ng-click="rename()"> Rename </a></li>
+                    <li><a ng-click="saveAsNew()"> Save as new type</a></li>
+                    <li><a ng-click="overwrite()"> Overwrite original type</a></li>
+                    <li><a ng-click="editProcedure()"> Edit procedure</a></li>
+                    <li><a ng-if="!checkDisabled()" ng-click="disableNode()"> Disable </a></li>
+                    <li><a ng-if="checkDisabled()" ng-click="enableNode()"> Enable </a></li>
+                </ul>
+            </div>
+
+            <div class="dropdown position-fixed " id="menu-connector" >
+                <ul class="dropdown-menu">
+                    <li>
+                        <a ng-click="delete()"> Hide </a>
+                    </li>
+                    <!--<li>-->
+                    <!--<a ng-click="rename()"> Rename </a>-->
+                    <!--</li>-->
+                </ul>
+            </div>
+
+            <div class="dropdown position-fixed " id="menu-connection" >
+                <ul class="dropdown-menu">
+                    <li>
+                        <a href="" ng-click="delete()"> Delete </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!--todo context menu for procedure items-->
+        <div ng-controller="procedureMenuCtrl" >
+            <div class="dropdown position-fixed " id="menu-procedure">
+                <ul class="dropdown-menu" >
+                    <li ng-if="!isOutput()">
+                        <a ng-if="!checkDisabled()" ng-click="disableProcedure()"> Disable </a>
+                    </li>
+
+                    <li ng-if="!isOutput()">
+                        <a ng-if="checkDisabled()" ng-click="enableProcedure()"> Enable </a>
+                    </li>
+
+                    <li>
+                        <a ng-click="copyProcedure()"> Copy </a>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+
     </div>
 </div>
+
+
+
+
 
 <!-- jquery -->
 <script type="text/javascript" src="assets/js/jquery/jquery-1.11.1.js"></script>
@@ -357,6 +701,7 @@
 <!-- angularJs -->
 <script type="application/javascript" src="assets/js/angular/angular.min.js"></script>
 <script type="text/javascript" src="assets/js/angular/angular-sanitize.js"></script>
+<script type="application/javascript" src="//code.angularjs.org/1.4.4/angular-route.js"></script>
 
 <!-- angular-ui -->
 <script type="application/javascript" src="assets/js/angular-ui/ui-layout/ui-layout.js"></script>
@@ -364,32 +709,34 @@
 <script type="text/javascript" src="mobius/procedure/angular-ui-tree.js"></script>
 <script type="text/javascript" src="assets/js/angular-ui/ui-select/select.js"></script>
 <script type="text/javascript" src="assets/js/angular-ui/angular-xeditable/xeditable.js"></script>
-<script type="text/javascript" src="assets/js/angular-ui/angular-prompt.js"></script>
 <script type="text/javascript" src="assets/js/angular-ui/ui-grid/ui-grid.min.js"></script>
 <script type="text/javascript" src="assets/js/angular-ui/hotkeys.js"></script>
-
+<script type="text/javascript" src="mobius/graph/ui-contextMenu/ng-context-menu.js"></script>
 
 <script type="text/javascript" src="assets/js/angular-ui/ui-ace/ui-ace.js"></script>
 <script type="text/javascript" src="assets/js/packages/ace-builds/src-min-noconflict/ace.js"></script>
 
+<script type="text/javascript" src="assets/js/angular-ui/history.js"></script>
+
+
 <!-- flowchart -->
-<script src="mobius/graph/ui-flowchart/debug.js" type="text/javascript"></script>
 <script src="mobius/graph/ui-flowchart/svg_class.js" type="text/javascript"></script>
 <script src="mobius/graph/ui-flowchart/mouse_capture_service.js" type="text/javascript"></script>
 <script src="mobius/graph/ui-flowchart/dragging_service.js" type="text/javascript"></script>
 <script src="mobius/graph/ui-flowchart/flowchart_viewmodel.js" type="text/javascript"></script>
 <script src="mobius/graph/ui-flowchart/flowchart_directive.js" type="text/javascript"></script>
+<script src="mobius/graph/ui-flowchart/debug.js" type="text/javascript"></script>
 
 <!-- zoom and pan -->
 <script src="assets/js/packages/hamsterjs/hamster.js"></script>
 <script src="assets/js/angular/angular-mousewheel/mousewheel.js"></script>
-<script src="assets/js/angular-ui/ui-panzoom/panzoom.js"></script>
+<script src="mobius/graph/ui-panzoom/panzoom.js"></script>
 
 <!-- three.js -->
 <script src="assets/js/threejs/three.js"></script>
 <script src="assets/js/threejs/OrbitControls.js"></script>
 <script src="assets/js/threejs/CombinedCamera.js"></script>
-
+<script src="assets/js/threejs/Detector.js"></script>
 
 <script src="assets/js/threejs/curves/NURBSCurve.js"></script>
 <script src="assets/js/threejs/curves/NURBSSurface.js"></script>
@@ -422,9 +769,14 @@
 <script src="mobius/viewport/console_controller.js"></script>
 <script src="mobius/viewport/viewport_controller.js"></script>
 <script src="mobius/layout_controller.js"></script>
+<script src="mobius/template/dialog_controller.js"></script>
+<script src="mobius/graph/addNewNode_Controller.js"></script>
+<script src="mobius/viewport/code_controller.js"></script>
+<script src="mobius/graph/contextMenu_controller.js"></script>
+<script src="mobius/procedure/procedureMenuCtrl.js"></script>
+
 
 <!-- directives -->
-<script src="mobius/graph/contextMenu_directive.js"></script>
 <script src="mobius/viewport/viewport_directive.js"></script>
 <script src="mobius/viewport/topoViewport_directive.js"></script>
 
@@ -433,13 +785,23 @@
 <script src="mobius/service/model.js"></script>
 <script src="mobius/service/console.js"></script>
 <script src="mobius/service/nodeCollection.js"></script>
+<script src="mobius/service/dataConversion.js"></script>
+<script src="mobius/service/executeService.js"></script>
 
 <!-- filters -->
 <script src="mobius/procedure/procedure_filters.js"></script>
 
 <!-- other -->
-<script src="mobius/module.js"></script>
 <script src="mobius/datastructure.js"></script>
+<script src="mobius/module/module_verb.js"></script>
+
+
+<!--angular material-->
+<script src="https://ajax.googleapis.com/ajax/libs/angular_material/0.11.2/angular-material.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular-animate.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular-aria.min.js"></script>
+
+
 
 
 </body>

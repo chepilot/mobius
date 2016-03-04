@@ -1,14 +1,15 @@
-<!--vidamo-->
+<!-- mobius -->
 <!-- procedure template -->
-
-
 
 <div ui-tree-handle class="tree-node tree-node-content procedure-tree ">
 
-    <div class="tree-hover">
+    <div ng-class="{'node-selected':node.selected,
+                    'node-disabled':node.disabled,
+                    'node-selected-disabled':node.selected && node.disabled}"
+         style="min-height: 22px">
 
     <!--data procedure-->
-    <div ng-if="node.title === 'Data'" style="padding-left:20px " class="tree-node-content  ">
+    <div ng-if="node.title === 'Data'" style="padding-left:20px " class="tree-node-content">
         <a>
             <!--vairable name and value-->
             <a href="#" data-nodrag editable-text="node.dataName" blur="submit"  buttons="no" >
@@ -27,7 +28,36 @@
 
         <div ui-tree-nodes=""  ng-model="node.nodes" ng-class="{hidden: collapsed}">
             <div ng-repeat="node in node.nodes"
-                 ui-tree-node ng-include="'vidamo/template/procedure.html'">
+                 ui-tree-node ng-include="'mobius/template/procedure.html'">
+            </div>
+        </div>
+
+    </div>
+
+
+    <!--output procedure-->
+    <div ng-if="node.title === 'Output'" style="padding-left:20px " class="tree-node-content  ">
+
+        Output
+        <a>
+            <!--Output name and value-->
+            <a href="#" data-nodrag editable-text="node.name" blur="submit"  buttons="no" >
+                {{ node.name || 'name' }}
+            </a>
+            =
+            <a data-nodrag href="#" editable-text="node.dataValue" buttons="no" blur="submit">
+                {{ node.dataValue || 'value' }}
+            </a>
+        </a>
+
+        <!--delete key-->
+        <a class="pull-right btn btn-xs" data-nodrag ng-click="removeOutput(this)" style="padding: 0;margin: 0" >
+            <span style="font-weight: 400; font-size: 16px;line-height:1" > &times; </span>
+        </a>
+
+        <div ui-tree-nodes=""  ng-model="node.nodes" ng-class="{hidden: collapsed}">
+            <div ng-repeat="node in node.nodes"
+                 ui-tree-node ng-include="'mobius/template/procedure.html'">
             </div>
         </div>
 
@@ -38,14 +68,14 @@
         <!--return vairable-->
         <a href="#" data-nodrag buttons="no"
            blur="submit"
-           ng-if="node.method !== 'print'"
+           ng-if="node.method !== 'print' && node.return !== false"
            editable-text="node.result"
            style="display: inline-block">
             {{ node.result || 'result' }} =
         </a>
 
         <!--method name-->
-        {{node.method}}
+        {{node.category}}.{{node.method}}
 
         (
         <!--parameters-->
