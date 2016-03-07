@@ -6,20 +6,24 @@
     <title>Mobius</title>
     <!-- loading page -->
     <script  src="assets/js/packages/pace/pace.min.js"></script>
-    <link href="assets/css/pace-theme.css" rel="stylesheet" />
+    <link href="assets/css/pace/pace-theme.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
 
     <!-- stylesheet -->
     <link rel="stylesheet" href="assets/css/mobius-layout.css">
-    <link rel="stylesheet" href="assets/css/viewport.css">
-    <link rel="stylesheet" href="assets/css/ui-layout.css">
-    <link rel="stylesheet" href="assets/css/bootstrap/bootstrap.css">
-    <link rel="stylesheet" href="assets/css/ui-tree.css">
+    <link rel="stylesheet" href="assets/css/menu.css">
+    <link rel="stylesheet" href="assets/css/view.css">
+    <link rel="stylesheet" href="assets/css/dropdown.css">
     <link rel="stylesheet" href="assets/css/graph.css">
-    <link rel="stylesheet" href="assets/css/select.css">
-    <link rel="stylesheet" href="assets/css/xeditable.css">
-    <link rel="stylesheet" href="assets/css/hotkeys.css">
-    <link rel="stylesheet" href="assets/css/material.css">
+    <link rel="stylesheet" href="assets/css/viewport.css">
+    <link rel="stylesheet" href="assets/css/procedure.css">
+    <link rel="stylesheet" href="assets/css/ui-layout/ui-layout.css">
+    <link rel="stylesheet" href="assets/css/bootstrap/bootstrap.css">
+    <link rel="stylesheet" href="assets/css/ui-tree/ui-tree.css">
+    <link rel="stylesheet" href="assets/css/flowchart/graph.css">
+    <link rel="stylesheet" href="assets/css/select/select.css">
+    <link rel="stylesheet" href="assets/css/xeditable/xeditable.css">
+    <link rel="stylesheet" href="assets/css/hotkey/hotkeys.css">
     <link rel="stylesheet" href="assets/css/ui-grid/ui-grid.min.css">
     <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.8.5/css/selectize.default.css">
 
@@ -32,15 +36,14 @@
     <!-- dropdown Menu -->
     <div ng-controller="menuCtrl" class = "menubar">
         <span dropdown on-toggle="toggled(open)">
-            <a style="color: #000" href dropdown-toggle>  File |</a>
+            <a href dropdown-toggle class = "menuTitle">  File |</a>
             <ul class="dropdown-menu">
                 <li>
                     <a href="" ng-click="newScene($event)"> New Scene</a>
                 </li>
 
                 <li>
-                    <input type="file" id="openSceneJson" name="files[]"
-                           style="visibility: hidden; width: 1px; height: 1px" multiple
+                    <input type="file" id="openSceneJson" name="files[]" multiple
                            onchange="angular.element(this).scope().openSceneJson(this.files)"/>
                     <a href="" onclick="document.getElementById('openSceneJson').click()">Open Scene</a>
                 </li>
@@ -68,7 +71,7 @@
 
 
         <span dropdown on-toggle="toggled(open)">
-            <a style="color: #000" href dropdown-toggle>  View |</a>
+            <a class = "menuTitle" href dropdown-toggle>  View |</a>
             <ul class="dropdown-menu">
                 <li>
                     <a ng-click = "singleView()"> Single View </a>
@@ -81,11 +84,10 @@
         </span>
 
         <span dropdown on-toggle="toggled(open)" >
-              <a style="color: #000" href dropdown-toggle>  Node |</a>
+              <a class = "menuTitle" href dropdown-toggle>  Node |</a>
               <ul class="dropdown-menu">
                   <li>
                       <input type="file" id="importNode"
-                             style="visibility: hidden; width: 1px; height: 1px"
                              multiple
                              onchange="angular.element(this).scope().importNode(this.files)"/>
                       <a href="" onclick="document.getElementById('importNode').click()"> Import Node </a>
@@ -100,7 +102,6 @@
 
                   <li>
                       <input type="file" id="importNodeLib"
-                             style="visibility: hidden; width: 1px; height: 1px"
                              onchange="angular.element(this).scope().importNodeLib(this.files)"/>
                       <a href="" onclick="document.getElementById('importNodeLib').click()"> Import Node Library</a>
                   </li>
@@ -114,7 +115,7 @@
         </span>
 
         <span dropdown on-toggle="toggled(open)" >
-            <a style="color: #000" href dropdown-toggle>  Code |</a>
+            <a class = "menuTitle" href dropdown-toggle>  Code |</a>
             <ul class="dropdown-menu">
                 <li id = "downloadJs">
                     <a ng-href="{{jsUrl}}" download="project.js" ng-click = "downloadJs()">
@@ -131,7 +132,7 @@
         </span>
 
         <span dropdown on-toggle="toggled(open)">
-            <a style="color: #000" href dropdown-toggle>  Help </a>
+            <a class = "menuTitle" href dropdown-toggle>  Help </a>
 
             <ul class="dropdown-menu">
                 <li>
@@ -146,27 +147,23 @@
                 </li>
             </ul>
         </span>
-        <span style="position:absolute;right:10px;top:5px;font-size: 12px;color:#555"> Mobius v0.1</span>
+        <span id="mobiusInfo"> Mobius v0.1</span>
     </div>
 
     <!-- resizable layout -->
-    <div ui-layout style="margin: 2px;
-                        border:1px solid #aaaaaa;
-                        border-radius: 4px;
-                        top: 23px;" id="layout">
+    <div ui-layout id="layout">
         <div ng-controller="layoutCtrl">
             <div class="layout-area" ui-layout="{flow : 'column'}" ng-controller="procedureCtrl">
                 <!-- 3D view area  -->
-                <div class=" view-area" ui-layout-container size={{viewportWidth}} id="viewport">
+                <div class="view-area" ui-layout-container size={{viewportWidth}} id="viewport">
                     <div ui-layout="{ flow : 'row', dividerSize:'10'}" >
                         <!-- threejs editor view port -->
-                        <div ui-layout-container size = "85%" style="z-index: 0">
+                        <div ui-layout-container size = "85%" id="viewportLayout">
                             <div ng-controller="viewportCtrl">
                                 <!--viewport menu-->
                                 <span ng-if="viewportControl.layout === 'singleView'"
-                                      dropdown on-toggle="toggled(open)"
-                                      style="left:5px;top:10px">
-                                     <button class="btn btn-default btn-xs" dropdown-toggle style="background: #ddd;">
+                                      dropdown on-toggle="toggled(open)" class="viewportMenu">
+                                     <button class="btn btn-default btn-xs viewport-menu-button" dropdown-toggle>
                                          {{viewportControl.currentCate}}
                                          <span class="caret"></span>
                                      </button>
@@ -207,16 +204,14 @@
 
                                 <!--viewports-->
                                 <viewport control="viewportControl"
-                                          id="threeViewport"
-                                          style="line-height:0">
+                                          id="threeViewport">
 
                                     <div ng-if="viewportControl.layout === 'fourViews'" >
                                         <!--LT-->
                                         <div id ="LT">
-                                        <span dropdown on-toggle="toggled(open)" style="left:5px;top:10px;">
-                                            <button class="btn btn-default btn-xs"
-                                                    dropdown-toggle
-                                                    style="background: #ddd;">
+                                        <span dropdown on-toggle="toggled(open)" class="viewportMenu">
+                                            <button class="btn btn-default btn-xs viewport-menu-button"
+                                                    dropdown-toggle>
                                                 {{viewportControl.LTcurrentCate}}
                                                 <span class="caret"></span>
                                             </button>
@@ -256,7 +251,7 @@
                                         </span>
 
                                             <div ng-if="showFullCodeLT">
-                                                <div style="width: 100%;top:35px;left:0;position: absolute;bottom: 0;"
+                                                <div class="codeViewport"
                                                      ui-ace="{ mode: 'javascript',theme: 'tomorrow'}"
                                                      ng-model="javascriptCode"
                                                      readonly="{{true}}"
@@ -264,22 +259,19 @@
                                                 </div>
                                             </div>
 
-                                            <div ng-if="showDataLT" style="height: 100%;width: 100%;left:0;position: absolute;top:40px">
+                                            <div ng-if="showDataLT" class="dataViewport">
                                                 <div ui-grid="gridOptions"
-                                                     class="grid"
                                                      ui-grid-resize-columns
                                                      ui-grid-auto-resize
-                                                     style="width: 100%; bottom:0;font-size: 12px">
+                                                     class="dataGrid">
                                                 </div>
                                             </div>
                                         </div>
 
                                         <!--RT-->
                                         <div id ="RT">
-                                        <span dropdown on-toggle="toggled(open)"
-                                              style="left:5px ;top:10px;">
-                                             <button class="btn btn-default btn-xs" dropdown-toggle
-                                                     style="background: #ddd;">
+                                        <span dropdown on-toggle="toggled(open)" class="viewportMenu">
+                                             <button class="btn btn-default btn-xs viewport-menu-button" dropdown-toggle>
                                                  {{viewportControl.RTcurrentCate}}
                                                  <span class="caret"></span>
                                              </button>
@@ -319,7 +311,7 @@
                                         </span>
 
                                             <div ng-if="showFullCodeRT">
-                                                <div style="width: 100%;top:35px;left:0;position: absolute;bottom: 0;"
+                                                <div class="codeViewport"
                                                      ui-ace="{ mode: 'javascript',theme: 'tomorrow'}"
                                                      ng-model="javascriptCode"
                                                      readonly="{{true}}"
@@ -327,20 +319,19 @@
                                                 </div>
                                             </div>
 
-                                            <div ng-if="showDataRT" style="height: 100%;width: 100%;left:0;position: absolute;top:40px">
+                                            <div ng-if="showDataRT" class="dataViewport">
                                                 <div ui-grid="gridOptions"
-                                                     class="grid"
                                                      ui-grid-resize-columns
                                                      ui-grid-auto-resize
-                                                     style="width: 100%; bottom:0;font-size: 12px">
+                                                     class="dataGrid">
                                                 </div>
                                             </div>
                                         </div>
 
                                         <!--LB-->
                                         <div id ="LB">
-                                        <span dropdown on-toggle="toggled(open)" style="left:5px;top:10px">
-                                            <button class="btn btn-default btn-xs" dropdown-toggle style="    background: #ddd;">
+                                        <span dropdown on-toggle="toggled(open)" class="viewportMenu">
+                                            <button class="btn btn-default btn-xs viewport-menu-button" dropdown-toggle>
                                                 {{viewportControl.LBcurrentCate}}
                                                 <span class="caret"></span>
                                             </button>
@@ -380,7 +371,7 @@
                                         </span>
 
                                             <div ng-if="showFullCodeLB">
-                                                <div style="width: 100%;top:35px;left:0;position: absolute;bottom: 0;"
+                                                <div class="codeViewport"
                                                      ui-ace="{ mode: 'javascript',theme: 'tomorrow'}"
                                                      ng-model="javascriptCode"
                                                      readonly="{{true}}"
@@ -388,20 +379,18 @@
                                                 </div>
                                             </div>
 
-                                            <div ng-if="showDataLB" style="height: 100%;width: 100%;left:0;position: absolute;top:40px">
+                                            <div ng-if="showDataLB" class="dataViewport">
                                                 <div ui-grid="gridOptions"
-                                                     class="grid"
                                                      ui-grid-resize-columns
-                                                     ui-grid-auto-resize
-                                                     style="width: 100%; bottom:0;font-size: 12px">
+                                                     ui-grid-auto-resize>
                                                 </div>
                                             </div>
                                         </div>
 
                                         <!--RB-->
                                         <div id ="RB">
-                                        <span dropdown on-toggle="toggled(open)" style="left:5px;top:10px">
-                                             <button class="btn btn-default btn-xs" dropdown-toggle style="    background: #ddd;">
+                                        <span dropdown on-toggle="toggled(open)" class="viewportMenu">
+                                             <button class="btn btn-default btn-xs viewport-menu-button" dropdown-toggle>
                                                  {{viewportControl.RBcurrentCate}}
                                                  <span class="caret"></span>
                                              </button>
@@ -441,7 +430,7 @@
                                         </span>
 
                                             <div ng-if="showFullCodeRB">
-                                                <div style="width: 100%;top:35px;left:0;position: absolute;bottom: 0;"
+                                                <div class="codeViewport"
                                                      ui-ace="{ mode: 'javascript',theme: 'tomorrow'}"
                                                      ng-model="javascriptCode"
                                                      readonly="{{true}}"
@@ -449,12 +438,11 @@
                                                 </div>
                                             </div>
 
-                                            <div ng-if="showDataRB" style="height: 100%;width: 100%;left:0;position: absolute;top:40px">
+                                            <div ng-if="showDataRB" class="dataViewport">
                                                 <div ui-grid="gridOptions"
-                                                     class="grid"
                                                      ui-grid-resize-columns
                                                      ui-grid-auto-resize
-                                                     style="width: 100%; bottom:0;font-size: 12px">
+                                                     class="dataGrid">
                                                 </div>
                                             </div>
                                         </div>
@@ -468,18 +456,14 @@
                                 </topo-viewport>
 
                                 <div id="LT1" ></div>
-
                                 <div id="RT1" ></div>
-
                                 <div id="LB1" ></div>
-
                                 <div id="RB1" ></div>
 
-                                <div id = 'topoContainer' style="position: absolute;top:0;bottom:0;left:0;right:0;"></div>
-
+                                <div id = 'topoContainer'></div>
 
                                 <div ng-if="showFullCode">
-                                    <div style="height: 100%;width: 100%;top:35px;left:0;position: absolute;"
+                                    <div class="codeViewport"
                                          ui-ace="{ mode: 'javascript',theme: 'tomorrow'}"
                                          ng-model="javascriptCode"
                                          readonly="{{true}}"
@@ -487,12 +471,11 @@
                                     </div>
                                 </div>
 
-                                <div ng-if="showData" style="height: 100%;width: 100%;left:0;position: absolute;top:40px">
+                                <div ng-if="showData" class="dataViewport">
                                     <div ui-grid="gridOptions"
-                                         class="grid"
                                          ui-grid-resize-columns
                                          ui-grid-auto-resize
-                                         style="height: 100%;width: 100%; bottom:100px;font-size: 12px">
+                                         class="dataGrid-main">
                                     </div>
                                 </div>
                             </div>
@@ -501,10 +484,9 @@
                         <!--console-->
                         <div ui-layout-container size = "15%" class="monitor">
                             <div ng-controller="consoleCtrl">
-                                 <pre class="nodeName" style="padding: 1px">
+                                 <pre class="nodeName">
                                     &nbsp &nbsp Console
                                     <button class="btn btn-default btn-xs pull-right"
-                                            style="padding-top: 0;padding-bottom:0;right:10px"
                                             id = "clear"
                                             ng-click="clearConsole()"> Clear </button>
                                  </pre>
@@ -524,32 +506,25 @@
 
                 <!-- graph area -->
                 <div class="graph-area" ui-layout-container  size={{graphWidth}} id="graph">
-
+                    <!--interface-->
                     <div ui-layout="{ flow : 'row', dividerSize:'10'}" >
                         <div ui-layout-container size = "25%">
-
                             <div >
                                 <div ng-if = "currentNodeName">
-                                    <pre class="nodeName" style="padding: 1px">
+                                    <pre class="nodeName">
                                         &nbsp &nbsp {{currentNodeType}} {{currentNodeVersion}} : &nbsp {{currentNodeName}} &nbsp
                                     </pre>
                                 </div>
 
                                 <div ng-if = "!currentNodeName">
-                                    <pre class="nodeName" style="padding: 1px">
+                                    <pre class="nodeName">
                                         &nbsp &nbsp No Node Selected
                                     </pre>
                                 </div>
 
-                                <div style="overflow: auto;
-                                            position: absolute;
-                                            height: 100%;
-                                            width: 100%;
-                                            border: 1px solid #cccccc;
-                                            border-radius: 4px;
-                                            margin-top:1px">
+                                <div id="interface">
                                     <div ui-tree id="tree-root-interface"
-                                         data-nodrop-enabled="true">
+                                         data-nodrop-enabl2ed="true">
                                         <div ui-tree-nodes="" ng-model="interface">
                                             <div ng-repeat="node in interface"
                                                  ui-tree-node
@@ -567,23 +542,18 @@
                              ui-layout-container size = "75%">
                             <div ng-controller="graphCtrl">
                                 <div ng-if = "currentNodeName">
-                                    <pre class="nodeName" style="padding: 1px">
+                                    <pre class="nodeName">
                                         &nbsp &nbsp {{currentNodeName}} &nbsp
                                     </pre>
                                 </div>
 
                                 <div ng-if = "!currentNodeName">
-                                    <pre class="nodeName" style="padding: 1px">
+                                    <pre class="nodeName">
                                         &nbsp &nbsp Graph
                                     </pre>
                                 </div>
 
-                                <span ng-controller="executeCtrl"
-                                      style="white-space: nowrap;
-                                                position: absolute;
-                                                right: 10px;
-                                                top:2px;
-                                                display: inline-block">
+                                <span ng-controller="executeCtrl" id="run-button">
                                     <button class="btn btn-default btn-xs"
                                             ng-click="run()"
                                             title="Run program">
@@ -592,9 +562,7 @@
                                 </span>
 
                                 <div ng-controller="znpController" class="znpController">
-                                    <div style="    border: 1px solid #cccccc;
-                                                    border-radius: 4px;
-                                                    margin-top:1px">
+                                    <div id="canvas">
                                         <panzoom config="panzoomConfig"
                                                  model="panzoomModel"
                                                  class="panzoom">
